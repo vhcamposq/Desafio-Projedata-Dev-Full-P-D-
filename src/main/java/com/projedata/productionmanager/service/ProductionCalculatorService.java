@@ -24,10 +24,10 @@ public class ProductionCalculatorService {
     public ProductionSuggestionResponse calculate() {
         List<Product> products = productRepository.findAllWithIngredients();
 
-        // Sort products by price descending (greedy: highest value first)
+        // Ordena produtos por preço decrescente (greedy: maior valor primeiro)
         products.sort(Comparator.comparing(Product::getPrice).reversed());
 
-        // Build a mutable stock map: rawMaterialId -> available quantity
+        // Monta mapa mutável de estoque: idMatériaPrima -> quantidade disponível
         Map<Long, BigDecimal> availableStock = buildStockMap(products);
 
         List<ProductionSuggestionItem> items = new ArrayList<>();
@@ -44,7 +44,7 @@ public class ProductionCalculatorService {
                 continue;
             }
 
-            // Consume stock
+            // Consome o estoque
             consumeStock(product, feasibleUnits, availableStock);
 
             BigDecimal totalValue = product.getPrice().multiply(BigDecimal.valueOf(feasibleUnits));
